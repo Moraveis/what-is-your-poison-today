@@ -1,29 +1,20 @@
 import { Router } from "express";
-import { stubIngridients } from "./database/stubIngridients";
-import { stubRecipes } from "./database/stubRecipes";
-import { findSuggestions, takeSuggestions } from "./service/SuggestionService";
+import { createIngridient, findAllIngridients, findIngridientByName } from "./service/IngridientService";
+
 
 export const router = Router();
 
+
 router.get("/ingridients", (req, res) => {
-    return res.json(stubIngridients);
+    return res.json(findAllIngridients());
 });
 
 router.get("/ingridients/:name", (req, res) => {
-    var ingridient = stubIngridients.find(i => i.name == req.params.name);
-    return res.json(ingridient);
+    return res.json(findIngridientByName(req.param.name));
 });
 
-router.get("/recipes", (req, res) => {
-    return res.json(stubRecipes);
-});
-
-router.get("/suggestions", (req, res) => {
-    return res.json(findSuggestions());
-});
-
-router.post("/suggestions", (req, res) => {
-    takeSuggestions(req.body);
-    return res.status(200).json(stubIngridients);
+router.post("/ingridients/create", (req, res) => {
+    let saved = createIngridient(req.body);
+    return res.status(201).json(saved);
 });
 
